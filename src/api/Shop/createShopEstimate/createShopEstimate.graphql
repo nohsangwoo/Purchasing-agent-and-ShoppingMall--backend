@@ -1,0 +1,13 @@
+type Mutation {
+  createShopEstimate(
+    Shop: String!
+    country: String!
+    productWeight: Float
+    firstExchangeRate: Float
+    secondExchangeRate: Float
+    firstPaypal: Int
+    secondPaypal: Int
+    ShippingType: String
+    visible: Boolean
+  ): Boolean!
+}

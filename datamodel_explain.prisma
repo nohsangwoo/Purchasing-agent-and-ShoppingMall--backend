@@ -1,0 +1,108 @@
+    
+
+// profile등에 표시되는 부분
+type User {
+// id필드는 ID속성이며 필수로 입력돼야하고 서로 중복될수없다
+// (그냥 @id라고 체크하면됨)
+id: ID! @id
+// avatar는 String속성이다
+avatar: String
+// username은 String속성에 필수 입력 내용이며 각 내용은 중복될수없다.
+username: String! @unique
+// email String속성에 필수 입력 내용이며 각 내용은 중복될수없다.
+email: String! @unique
+// @default 기본값을 지정해줌
+firstName: String @default(value: "")
+lastName: String
+bio: String
+// @relation은 해당 테이블과 연결됐다는 내용
+// 해석하자면User 테이블은 following테이블과 연결돼있음
+// following필드는 User의 배열로 이루어져있음
+// 내가 다른 user를 following해서 user의 목록을 가지고 있어야 하니깐 배열
+following: [User!]! @relation(name: "FollowRelation")
+
+// User 테이블은 followers 테이블과 연결돼있음
+// follower필드는 User의 배열로 이루어져있음
+// 나를 follow한 사람들이 얼마나 있는지를 가지고있는 정보니깐 배열
+// name 부분은 꼭 필요한 내용이지만 내용은 마음대로 작성
+followers: [User!]! @relation(name: "FollowRelation")
+
+// onDelete:CASCADE user가 지워지면 해당 user랑 연결된 post와 like가 같이지워짐
+posts: [Post!]! @relation(name: "PostsOfUser", onDelete: CASCADE)
+likes: [Like!]! @relation(name: "LikesOfUser", onDelete: CASCADE)
+comments: [Comment!]! @relation(name: "CommentsOfUser", onDelete: CASCADE)
+rooms: [Room!]!
+loginSecret: String
+createdAt: DateTime @createdAt
+updatedAt: DateTime @updatedAt
+}
+
+// feed 부분에 나타나는 Post부분(사진이랑 댓글 달리고 좋아요 등등..)
+// Post는 user,file,like,coment 랑 연결돼있음
+type Post {
+id: ID! @id
+location: String
+caption: String!
+user: User @relation(name: "PostsOfUser")
+files: [File!]! @relation(name: "FilesOfPost", onDelete: CASCADE)
+likes: [Like!]! @relation(name: "LikeOfPost", onDelete: CASCADE)
+comments: [Comment!]! @relation(name: "CommentOfPost", onDelete: CASCADE)
+createdAt: DateTime @createdAt
+updatedAt: DateTime @updatedAt
+}
+
+// 좋아요 부분(주가 좋아했는지? 무엇을 좋아했는지?)
+type Like {
+id: ID! @id
+user: User @relation(name: "LikesOfUser")
+post: Post @relation(name: "LikeOfPost")
+createdAt: DateTime @createdAt
+updatedAt: DateTime @updatedAt
+}
+
+// 댓글내용 부분
+type Comment {
+id: ID! @id
+text: String!
+user: User @relation(name: "CommentsOfUser")
+post: Post @relation(name: "CommentOfPost")
+createdAt: DateTime @createdAt
+updatedAt: DateTime @updatedAt
+}
+
+// 업로드되는 파일들
+// File은 Post랑 연결돼있음
+type File {
+id: ID! @id
+url: String!
+post: Post @relation(name: "FilesOfPost")
+createdAt: DateTime @createdAt
+updatedAt: DateTime @updatedAt
+}
+
+// direct Message 부분 채팅방의 구분
+type Room {
+id: ID! @id
+participants: [User!]!
+messages: [Message!]!
+createdAt: DateTime @createdAt
+updatedAt: DateTime @updatedAt
+}
+
+// direct Message 부분 채팅시 누가 누구에게 어떤내용을 언제?? 어디서?
+type Message {
+id: ID! @id
+text: String!
+from: User! @relation(name: "From")
+to: User! @relation(name: "To")
+room: Room!  
+ createdAt: DateTime @createdAt
+updatedAt: DateTime @updatedAt
+}
+
+type Variable {
+  id: ID! @id
+  exchangeRate: Float!
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+}

@@ -1,0 +1,3 @@
+type Mutation {
+  createShop(username: String!, Stage: Int, visible: Boolean): Shop!
+}

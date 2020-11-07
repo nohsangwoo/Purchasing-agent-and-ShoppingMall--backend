@@ -1,0 +1,8 @@
+type Mutation {
+  createCart(
+    goodsId: String!
+    color: String!
+    size: String!
+    quantity: String!
+  ): Boolean!
+}

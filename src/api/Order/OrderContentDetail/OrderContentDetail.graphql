@@ -1,0 +1,16 @@
+# 회원가입기능임
+# createAccount 라는 mutation의 쿼리를 생성
+# createAccount로 입력될 인자들의 type을 설정 이때 username 과 email은 필수로 입력해야하며, 나머지는 보조값
+# 반환값은 Boolean
+
+type Mutation {
+  createOrderContentDetail(
+    OrderContent: String
+    serviceType: String!
+    productName: String!
+    productURL: String
+    productOption: String!
+    fileImageURL: String
+    visible: Boolean
+  ): Boolean!
+}

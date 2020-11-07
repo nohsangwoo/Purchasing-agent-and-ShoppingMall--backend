@@ -1,0 +1,8 @@
+# 비밀키를 email로 전송함
+
+type Mutation {
+  confirmOrderPrimaryPayment(
+    orderId: String!
+    ConfirmPrimaryPayment: Boolean    
+  ): Boolean!
+}

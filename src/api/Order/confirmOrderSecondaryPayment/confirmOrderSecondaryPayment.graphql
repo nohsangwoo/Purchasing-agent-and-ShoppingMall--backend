@@ -1,0 +1,12 @@
+# 비밀키를 email로 전송함
+
+type Mutation {
+  confirmOrderSecondaryPayment(
+    orderId: String!
+    ConfirmSecondaryPayment: Boolean
+    addressId: String
+    orderEstimatesId: String!
+    secondPaypal: Int
+    ShippingType: String
+  ): Boolean!
+}

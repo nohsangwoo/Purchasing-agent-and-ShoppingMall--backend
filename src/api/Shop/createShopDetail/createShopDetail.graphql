@@ -1,0 +1,15 @@
+type Mutation {
+  createShopDetail(
+    Shop: String!
+    imageURL: String
+    title: String!
+    basePrice: String!
+    goodsId: String!
+    firstOption: String!
+    secondOption: String!
+    quantity: String!
+    addPrice: String!
+    quantityPerGoods: String!
+    visible: Boolean
+  ): Boolean!
+}

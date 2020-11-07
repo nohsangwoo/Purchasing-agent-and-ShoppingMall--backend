@@ -1,0 +1,276 @@
+type User {
+  id: ID!
+  avatar: String
+  username: String!
+  email: String!
+  firstName: String
+  lastName: String
+  fullName: String
+  isFollowing: Boolean!
+  isSelf: Boolean!
+  bio: String
+  following: [User!]!
+  followingCount: Int!
+  followers: [User!]!
+  followersCount: Int!
+  posts: [Post!]!
+  postsCount: Int!
+  likes: [Like!]!
+  carts: [Cart!]!
+  cartsCount: Int!
+  OrderContents: [OrderContent!]!
+  Shops: [Shop]
+  addresses: [UserAddress]
+  comments: [Comment!]!
+  rooms: [Room!]!
+  loginSecret: String!
+  createdAt: String
+  updatedAt: String
+}
+
+type Admin {
+  id: ID!
+  avatar: String
+  username: String!
+  email: String!
+  bio: String
+  posts: [Post!]!
+  comments: [Comment!]!
+  rooms: [Room!]!
+  loginSecret: String!
+  createdAt: String
+  updatedAt: String
+}
+
+type Post {
+  id: ID!
+  location: String
+  caption: String!
+  user: User!
+  files: [File!]!
+  likes: [Like!]!
+  comments: [Comment!]!
+  isLiked: Boolean!
+  likeCount: Int!
+  commentCount: Int!
+  createdAt: String
+  updatedAt: String
+}
+
+type Like {
+  id: ID!
+  user: User!
+  post: Post!
+  goods: Goods!
+  createdAt: String
+  updatedAt: String
+}
+
+type Comment {
+  id: ID!
+  text: String!
+  user: User!
+  admin: Admin
+  post: Post!
+  goods: Goods!
+  createdAt: String
+  updatedAt: String
+}
+
+type File {
+  id: ID!
+  url: String!
+  color: String
+  post: Post!
+  goods: Goods!
+  createdAt: String
+  updatedAt: String
+}
+
+type Room {
+  id: ID!
+  participants: [User!]!
+  messages: [Message!]!
+  createdAt: String
+  updatedAt: String
+}
+
+type Message {
+  id: ID!
+  text: String!
+  from: User!
+  to: User!
+  room: Room!
+  createdAt: String
+  updatedAt: String
+}
+
+type ExchangeRate {
+  id: ID!
+  countryName: String!
+  exchangeRate: Float!
+  JPexchangeRate: Float
+  USDexchangeRate: Float
+  createdAt: String
+  updatedAt: String
+}
+
+type OrderContent {
+  id: ID!
+  username: String!
+  user: User!
+  OrderContentDetails: [OrderContentDetail]
+  Estimates: [Estimate]
+  Stage: Int
+  ConfirmPrimaryPayment: Boolean
+  ConfirmSecondaryPayment: Boolean
+  Refund: Boolean
+  visible: Boolean
+  OrderContentDetailCount: Int!
+  createdAt: String
+  updatedAt: String
+}
+
+type OrderContentDetail {
+  id: ID!
+  OrderContent: OrderContent
+  country: String
+  serviceType: String!
+  productName: String!
+  productURL: String
+  productOption: String!
+  fileImageURL: String
+  productPrice: Int
+  visible: Boolean
+  createdAt: String
+  updatedAt: String
+}
+
+type Estimate {
+  id: ID!
+  OrderContent: OrderContent!
+  country: String!
+  orderWeight: String
+  firstExchangeRate: Float
+  secondExchangeRate: Float
+  firstPaypal: Int
+  secondPaypal: Int
+  selectSecondPaypal: String
+  ShippingType: String
+  addressId: String
+  shippingNumber: String
+  visible: Boolean
+  createdAt: String
+  updatedAt: String
+}
+
+type Goods {
+  id: ID!
+  Title: String!
+  Description: String
+  leftQuantity: Int
+  salesQuantity: Int
+  price: Float
+  size: String
+  sizeAddPrice: String
+  productInfo: String
+  sizeInfo: String
+  color: [File]
+  colorAddPrice: String
+  admin: Admin!
+  files: [File]
+  likes: [Like]
+  comments: [Comment]
+  searchTags: String
+  searchTagsJP: String
+  searchTagsEng: String
+  tags: Tag
+  likeCount: Int!
+  isLiked: Boolean!
+  visible: Boolean
+  createdAt: String
+  updatedAt: String
+}
+
+type Tag {
+  id: ID!
+  tagName: String!
+  tagNameEng: String
+  tagNameJp: String
+  goods: [Goods]
+  createdAt: String
+  updatedAt: String
+}
+
+type Cart {
+  id: ID!
+  user: User
+  goods: Goods!
+  color: String!
+  size: String!
+  isSelf: Boolean!
+  quantity: String!
+  createdAt: String
+  updatedAt: String
+}
+
+type Shop {
+  id: ID!
+  user: User!
+  ShopEstimates: [ShopEstimate]
+  ShopDetailCount: Int!
+  username: String!
+  Stage: Int
+  Refund: Boolean
+  ConfirmSecondaryPayment: Boolean
+  ShopDetails: [ShopDetail]
+  visible: Boolean
+  createdAt: String
+  updatedAt: String
+}
+
+type ShopDetail {
+  id: ID!
+  Shop: Shop!
+  imageURL: String!
+  title: String!
+  basePrice: String!
+  goodsId: String!
+  firstOption: String!
+  secondOption: String!
+  quantity: String!
+  addPrice: String!
+  quantityPerGoods: String!
+  visible: Boolean
+  createdAt: String
+  updatedAt: String
+}
+
+type ShopEstimate {
+  id: ID!
+  Shop: Shop!
+  country: String!
+  productWeight: Float
+  shopWeight: String
+  firstExchangeRate: Float
+  secondExchangeRate: Float
+  firstPaypal: Int
+  selectSecondPaypal: String
+  secondPaypal: Int
+  ShippingType: String
+  addressId: String
+  shippingNumber: String
+  visible: Boolean
+  createdAt: String
+  updatedAt: String
+}
+
+type UserAddress {
+  id: ID!
+  user: User!
+  address: String
+  post: String
+  visible: Boolean
+  createdAt: String
+  updatedAt: String
+}

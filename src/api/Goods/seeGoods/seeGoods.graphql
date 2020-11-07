@@ -1,0 +1,3 @@
+type Query {
+  seeGoods(num: Int!): [Goods!]!
+}

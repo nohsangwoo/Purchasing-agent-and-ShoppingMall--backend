@@ -1,0 +1,275 @@
+type User {
+  id: ID! @id
+  avatar: String
+    @default(
+      value: "https://ffss-default-img.s3.ap-northeast-2.amazonaws.com/defaultProfile.png"
+    )
+  username: String! @unique
+  email: String! @unique
+  firstName: String @default(value: "")
+  lastName: String
+  bio: String
+  following: [User!]! @relation(name: "FollowRelation")
+  followers: [User!]! @relation(name: "FollowRelation")
+  posts: [Post!]! @relation(name: "PostsOfUser", onDelete: CASCADE)
+  likes: [Like!]! @relation(name: "LikesOfUser", onDelete: CASCADE)
+  carts: [Cart!]! @relation(name: "CartsOfUser", onDelete: CASCADE)  
+  OrderContents: [OrderContent!]!
+    @relation(name: "OrderContentOfUser", onDelete: CASCADE)
+  Shops: [Shop!]! @relation(name: "ShopOfUser", onDelete: CASCADE)  
+  addresses: [UserAddress!]! @relation(name: "UserAddressOfUser", onDelete: CASCADE)    
+  comments: [Comment!]! @relation(name: "CommentsOfUser", onDelete: CASCADE)
+  rooms: [Room!]!
+  loginSecret: String
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+}
+
+
+
+type Admin {
+  id: ID! @id
+  avatar: String
+    @default(
+      value: "https://ffss-default-img.s3.ap-northeast-2.amazonaws.com/defaultProfile.png"
+    )
+  username: String! @unique
+  email: String! @unique
+  bio: String
+  goods: [Goods!]! @relation(name: "GoodsOfAdmin", onDelete: CASCADE)
+  comments: [Comment!]! @relation(name: "CommentsOfAdmin", onDelete: CASCADE)
+  rooms: [Room!]!
+  loginSecret: String
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+}
+
+type Post {
+  id: ID! @id
+  location: String
+  caption: String!
+  user: User @relation(name: "PostsOfUser")
+  files: [File!]! @relation(name: "FilesOfPost", onDelete: CASCADE)
+  likes: [Like!]! @relation(name: "LikeOfPost", onDelete: CASCADE)
+  comments: [Comment!]! @relation(name: "CommentOfPost", onDelete: CASCADE)
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+}
+
+type Like {
+  id: ID! @id
+  user: User @relation(name: "LikesOfUser")
+  post: Post @relation(name: "LikeOfPost")
+  goods: Goods @relation(name: "LikeOfGoods")
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+}
+
+type Comment {
+  id: ID! @id
+  text: String!
+  user: User @relation(name: "CommentsOfUser")
+  admin: Admin @relation(name: "CommentsOfAdmin")
+  post: Post @relation(name: "CommentOfPost")
+  goods: Goods @relation(name: "CommentOfGoods")
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+}
+
+type File {
+  id: ID! @id
+  url: String!
+  color: String @default(value: "")
+  post: Post @relation(name: "FilesOfPost")
+  goods: Goods @relation(name: "FilesOfGoods")
+  goodsColor: Goods @relation(name: "FilesOfGoodsColor")
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+}
+
+type Room {
+  id: ID! @id
+  participants: [User!]!
+  messages: [Message!]!
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+}
+
+type Message {
+  id: ID! @id
+  text: String!
+  from: User! @relation(name: "From")
+  to: User! @relation(name: "To")
+  room: Room!
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+}
+
+type ExchangeRate {
+  id: ID! @id
+  countryName: String!
+  exchangeRate: Float!
+  JPexchangeRate: Float
+  USDexchangeRate: Float
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+}
+
+type OrderContent {
+  id: ID! @id
+  username: String!
+  user: User @relation(name: "OrderContentOfUser")
+  OrderContentDetails: [OrderContentDetail!]!
+    @relation(name: "OrderContentDetailOfOrderContent", onDelete: CASCADE)
+  Estimates: [Estimate]
+    @relation(name: "EstimateOfOrderContent", onDelete: CASCADE)
+  Stage: Int
+  ConfirmPrimaryPayment: Boolean @default(value: false)
+  ConfirmSecondaryPayment: Boolean @default(value: false)
+  Refund: Boolean @default(value: false)
+  visible: Boolean
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+}
+
+type OrderContentDetail {
+  id: ID! @id
+  OrderContent: OrderContent @relation(name: "OrderContentDetailOfOrderContent")
+  serviceType: String!
+  productName: String!
+  productURL: String
+  productOption: String!
+  fileImageURL: String
+  productPrice: Int @default(value: 0)
+  visible: Boolean
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+}
+
+type Estimate {
+  id: ID! @id
+  OrderContent: OrderContent! @relation(name: "EstimateOfOrderContent")  
+  country: String!  
+  orderWeight: String
+  firstExchangeRate: Float
+  secondExchangeRate: Float
+  firstPaypal: Int @default(value: 0)
+  secondPaypal: Int @default(value: 0)
+  selectSecondPaypal: String
+  ShippingType: String @default(value: "")
+  addressId: String
+  shippingNumber: String
+  visible: Boolean @default(value: true)
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+}
+
+type Goods {
+  id: ID! @id
+  Title: String!
+  Description: String
+  leftQuantity: Int @default(value: 50)
+  salesQuantity: Int @default(value: 0)
+  price: Float @default(value: 0)
+  size: String @default(value: "")
+  sizeAddPrice: String @default(value: "")
+  productInfo: String
+  sizeInfo: String
+  color: [File] @relation(name: "FilesOfGoodsColor", onDelete: CASCADE)
+  colorAddPrice: String @default(value: "")
+  admin: Admin @relation(name: "GoodsOfAdmin")
+  files: [File] @relation(name: "FilesOfGoods", onDelete: CASCADE)
+  likes: [Like] @relation(name: "LikeOfGoods", onDelete: CASCADE)
+  comments: [Comment] @relation(name: "CommentOfGoods", onDelete: CASCADE)
+  searchTags: String
+  searchTagsJP: String
+  searchTagsEng: String
+  tags: Tag @relation(name: "TagOfGoods")  
+  visible: Boolean @default(value: true)
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+}
+
+type Tag {
+  id: ID! @id
+  tagName: String!
+  tagNameEng: String
+  tagNameJp: String
+  goods: [Goods] @relation(name: "TagOfGoods")  
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+}
+
+
+type Cart {
+  id: ID! @id
+  user: User @relation(name: "CartsOfUser")
+  goods: Goods! 
+  color: String! 
+  size: String!  
+  quantity: String!    
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+}
+
+
+type Shop {
+  id: ID! @id
+  user: User! @relation(name: "ShopOfUser")
+  ShopEstimates: [ShopEstimate] @relation(name: "ShopEstimateOfShop", onDelete: CASCADE)
+  username: String!    
+  Stage: Int
+  Refund: Boolean @default(value: false)
+  ConfirmSecondaryPayment: Boolean @default(value: false)
+  ShopDetails: [ShopDetail] @relation(name: "ShopDetailOfShop", onDelete: CASCADE)
+  visible: Boolean
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+}
+
+type ShopDetail {
+  id: ID! @id  
+  Shop: Shop! @relation(name: "ShopDetailOfShop")  
+  imageURL: String!
+  title: String!
+  basePrice: String!
+  goodsId: String!
+  firstOption: String!
+  secondOption: String!
+  quantity: String!
+  addPrice: String!
+  quantityPerGoods: String!  
+  visible: Boolean
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+}
+
+type ShopEstimate {
+  id: ID! @id
+  Shop: Shop! @relation(name: "ShopEstimateOfShop")
+  country: String!
+  productWeight: Float
+  shopWeight: String
+  firstExchangeRate: Float
+  secondExchangeRate: Float
+  firstPaypal: Int @default(value: 0)
+  selectSecondPaypal: String 
+  secondPaypal: Int @default(value: 0)
+  ShippingType: String @default(value: "")
+  addressId: String
+  shippingNumber: String
+  visible: Boolean @default(value: true)
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+}
+
+
+type UserAddress {
+ id: ID! @id
+  user: User! @relation(name: "UserAddressOfUser")
+  address: String
+  post: String  
+  visible: Boolean
+  createdAt: DateTime @createdAt
+  updatedAt: DateTime @updatedAt
+}

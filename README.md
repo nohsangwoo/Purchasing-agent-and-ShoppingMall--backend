@@ -34,6 +34,8 @@
 > 클릭(click)<br/> > [![Video Label](http://img.youtube.com/vi/B8qYpVIbnf4/0.jpg)](https://youtu.be/B8qYpVIbnf4?t=0s)
 
 ### 구현 이미지
+![1](https://user-images.githubusercontent.com/57750190/98429397-adc88300-20e9-11eb-9f9e-8bfc6fa75165.png)
+![2](https://user-images.githubusercontent.com/57750190/98429398-aef9b000-20e9-11eb-9e1b-70edbc8b360a.png)
 
 <img width="1920" alt="Desktop Screenshot 2020 11 07 - 09 57 07 34" src="https://user-images.githubusercontent.com/57750190/98427586-2aa32f00-20e1-11eb-9de6-f8fcb6610d6b.png">
 <img width="1920" alt="Desktop Screenshot 2020 11 07 - 09 57 11 33" src="https://user-images.githubusercontent.com/57750190/98427588-2bd45c00-20e1-11eb-938d-bd067d6885d5.png">
